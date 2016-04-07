@@ -15,7 +15,8 @@ config = {
     'influx_port': int(os.environ.get('INFLUX_PORT',8086)),
     'influx_user': os.environ.get('INFLUX_USER','root'),
     'influx_password': os.environ.get('INFLUX_PASSWORD','root'),
-    'verbose': (os.environ.get('VERBOSE','False') == 'True')
+    'verbose': (os.environ.get('VERBOSE','False') == 'True'),
+    'request_timeout': int(os.environ.get('REQUEST_TIMEOUT',5000))
 }
 
 # Set the timezone, usees environment variable 'TZ', like this: os.environ['TZ']
@@ -24,6 +25,7 @@ print('type=info msg="influx settings" host=%s database=%s' % (str(config['influ
 
 ic = Ic_controller()
 ic.verbose = config['verbose']
+ic.timeout = config['request_timeout']
 ic.user = config['ic_user']
 ic.password = config['ic_password']
 ic.dbname = config['database']

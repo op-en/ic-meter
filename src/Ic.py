@@ -134,13 +134,13 @@ class Ic(Timeseries):
 
         # print data_url
 
-        r = requests.get(data_url)
+        r = requests.get(data_url, timeout=self.timeout)
 
         #Retry if failed
         if r.status_code != 200:
-            r = requests.get(data_url)
+            r = requests.get(data_url, timeout=self.timeout)
         if r.status_code != 200:
-            r = requests.get(data_url)
+            r = requests.get(data_url, timeout=self.timeout)
         if r.status_code != 200:
             print "Request failed!"
 
@@ -240,6 +240,7 @@ class Ic_controller():
     user = None
     password = None
     verbose = True
+    timeout = 5000
     heat_boxes = []
 
     #Login
@@ -250,7 +251,7 @@ class Ic_controller():
         url = "https://app.ic-meter.com/icm/oauth/token?client_id=trusted-client&grant_type=password&scope=read&username=%s&password=%s" % (self.user, self.password)
 
         #Request password cookie
-        r = requests.get(url,headers=headers,allow_redirects=False)
+        r = requests.get(url,headers=headers,allow_redirects=False, timeout=self.timeout)
 
         if r.status_code == 200:
             self.session = json.loads(r.text)
@@ -266,7 +267,7 @@ class Ic_controller():
         url = "https://app.ic-meter.com/icm/api/boxlocations?access_token=%s&_=%s" % (self.session['access_token'], millis)
 
         #Request password cookie
-        r = requests.get(url,allow_redirects=False)
+        r = requests.get(url,allow_redirects=False, timeout=self.timeout)
 
         boxes = json.loads(r.text)
 
@@ -282,6 +283,7 @@ class Ic_controller():
             ic.box = box
             ic.session = self.session
             ic.verbose = self.verbose
+            ic.timeout = self.timeout
             ic.SetInfluxConnection(dbname=self.dbname,dbhost=self.dbhost, dbport=self.dbport, dbuser=self.dbuser,dbpassword=self.dbpassword)
             ic.CheckDatabase()
             ic.ImportMissing()
