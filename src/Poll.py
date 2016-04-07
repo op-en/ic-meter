@@ -16,8 +16,13 @@ config = {
     'influx_user': os.environ.get('INFLUX_USER','root'),
     'influx_password': os.environ.get('INFLUX_PASSWORD','root'),
     'verbose': (os.environ.get('VERBOSE','False') == 'True'),
+    'startup_timeout':int(os.environ.get('STARTUP_TIMEOUT',5)),
     'request_timeout': int(os.environ.get('REQUEST_TIMEOUT',5000))
 }
+
+print('type=info msg="started, waiting for influx to start" seconds=%s' % str(config['startup_timeout'] ))
+time.sleep(config['startup_timeout'])
+print('type=info msg="woke up, continuing"')
 
 # Set the timezone, usees environment variable 'TZ', like this: os.environ['TZ']
 time.tzset()

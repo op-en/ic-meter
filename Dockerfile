@@ -24,6 +24,7 @@ ENV INFLUX_USER root
 ENV INFLUX_PASSWORD root
 ENV VERBOSE False
 ENV REQUEST_TIMEOUT 5000
+ENV STARTUP_TIMEOUT 5
 
 # Go go go!
 CMD ["python","-u","/opt/ic/Poll.py"]
